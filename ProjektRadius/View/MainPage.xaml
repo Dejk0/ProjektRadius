@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:ProjektRadius.ViewModel"
+             x:DataType="viewmodel:ViewModel"
+             x:Class="ProjektRadius.MainPage"
+             Title ="{Binding Title}">
+
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="5,0"
+            Spacing="5">
+            <Image
+                Source="dotnet_bot.png"
+                HeightRequest="150"
+                Aspect="AspectFit"
+                SemanticProperties.Description="dot net bot in a race car number eight" />
+
+            <Label
+                Text="Hello, Wife!"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1" />
+            <Button                
+    Text="Start Accelomater" 
+    Command="{Binding GetAccelerometerCommand}"
+    IsEnabled="{Binding IsNotBusy}"
+    HorizontalOptions="Fill" />
+            <Label Text="Gyorsulások"/>
+            <Label Text="{Binding XResult}"/>
+            <Label Text="{Binding YResult}"/>
+            <Label Text="{Binding ZResult}"/>
+            <Label Text="Szögek"/>
+            <Label Text="{Binding AlfaAngle}"/>
+            <Label Text="{Binding BetaAngle}"/>
+            <Label Text="{Binding GammaAngle}"/>
+            <Button                
+Text="File write" 
+Command="{Binding ExportToCsvCommand}"
+IsEnabled="{Binding IsNotBusy}"
+HorizontalOptions="Fill" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
