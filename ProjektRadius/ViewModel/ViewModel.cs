@@ -11,7 +11,6 @@ namespace ProjektRadius.ViewModel
 {
     public partial class ViewModel : BaseViewModel
     {
-        IGeolocation geolocation;
         IOrientationSensor orientationSensor;
         IGeolocator geolocator;
         private Stopwatch sw = new Stopwatch();
@@ -21,13 +20,7 @@ namespace ProjektRadius.ViewModel
         public List<double> betaAngle_1 = new List<double>();
         public List<double> gammaAngle_1 = new List<double>();
         public List<long> time = new List<long>();
-
-        [ObservableProperty]
-        public string xResult = "";
-        [ObservableProperty]
-        public string yResult = "";
-        [ObservableProperty]
-        public string zResult = "";
+        
         [ObservableProperty]
         public double alfaAngle;
         [ObservableProperty]
@@ -37,18 +30,14 @@ namespace ProjektRadius.ViewModel
         [ObservableProperty]
         public double speed;
 
-        public float xResult_base;
-        public float yResult_base;
-        public float zResult_base;
         public double alfaAngle_base;
         public double betaAngle_base;
         public double gammaAngle_base;
 
         public List<double> speed_list = new List<double>();
-    public ViewModel(IConnectivity connectivity, IGeolocation geolocation,  IOrientationSensor orientationSensor,  IGeolocator geolocator)
+        public ViewModel(IConnectivity connectivity,  IOrientationSensor orientationSensor,  IGeolocator geolocator)
         {
-            Title = "ProjektRadius";            
-            this.geolocation = geolocation;
+            Title = "ProjektRadius";  
             this.orientationSensor = orientationSensor;
             orientationSensor.ReadingChanged += OrientationSensor_ReadingChanged;
             this.geolocator = geolocator;
@@ -62,25 +51,45 @@ namespace ProjektRadius.ViewModel
 
         public void ToEulerAngles(float x, float y, float z, float w)
         {
-            double sinr_cosp = 2 * (w * x + y * z);
-            double cosr_cosp = 1 - 2 * (x * x + y * y);
-            double alpha = Math.Atan2(sinr_cosp, cosr_cosp);
 
-            double sinp = 2 * (w * y - z * x);
-            double beta;
-            if (Math.Abs(sinp) >= 1)
-                beta = Math.CopySign(Math.PI / 2, sinp); // use 90 degrees if out of range
-            else
-                beta = Math.Asin(sinp);
-
-            double siny_cosp = 2 * (w * z + x * y);
-            double cosy_cosp = 1 - 2 * (y * y + z * z);
-            double gamma = Math.Atan2(siny_cosp, cosy_cosp);
-            AlfaAngle = alpha * 180.0 / Math.PI;
-            BetaAngle = beta * 180.0 / Math.PI;
-            GammaAngle = gamma * 180.0 / Math.PI;
+        double alpha = Alfa_Calculating(x, y, z, w);
+        double beta = Beta_Calculating(x, y, z, w);
+        double gamma = Gamma_Calculating(x, y, z, w);      
+        UpdateTheAngles(alpha,beta,gamma);
         }
-        private void OrientationSensor_ReadingChanged(object? sender, OrientationSensorChangedEventArgs e)
+    private void UpdateTheAngles(double alpha, double beta, double gamma)
+    {
+      AlfaAngle = alpha * 180.0 / Math.PI;
+      BetaAngle = beta * 180.0 / Math.PI;
+      GammaAngle = gamma * 180.0 / Math.PI;
+    }
+
+    private double Alfa_Calculating(float x, float y, float z, float w)
+    {
+      double sinr_cosp = 2 * (w * x + y * z);
+      double cosr_cosp = 1 - 2 * (x * x + y * y);
+      double alpha = Math.Atan2(sinr_cosp, cosr_cosp);
+      return alpha;
+    }
+    private double Beta_Calculating(float x, float y, float z, float w)
+    {
+      double sinp = 2 * (w * y - z * x);
+      double beta;
+      if (Math.Abs(sinp) >= 1)
+        beta = Math.CopySign(Math.PI / 2, sinp);
+      else
+        beta = Math.Asin(sinp);
+      return beta;
+    }
+    private double Gamma_Calculating(float x, float y, float z, float w)
+    {
+      double siny_cosp = 2 * (w * z + x * y);
+      double cosy_cosp = 1 - 2 * (y * y + z * z);
+      double gamma = Math.Atan2(siny_cosp, cosy_cosp);
+      return gamma;
+    }
+
+    private void OrientationSensor_ReadingChanged(object? sender, OrientationSensorChangedEventArgs e)
         {
             ToEulerAngles(e.Reading.Orientation.X, e.Reading.Orientation.Y, e.Reading.Orientation.Z, e.Reading.Orientation.W);
 
@@ -90,7 +99,6 @@ namespace ProjektRadius.ViewModel
     {
       sw.Start();
       timeWatch.Start();
-
       while (true)
       {
         if (IsNotBusy)
@@ -110,8 +118,6 @@ namespace ProjektRadius.ViewModel
         }
       }
     }
-
-
     private void Accelerometer_Working(object sender, AccelerometerChangedEventArgs args)
         { 
             if (sw.ElapsedMilliseconds > 50)
@@ -154,41 +160,7 @@ namespace ProjektRadius.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
             }
-        }
-        [RelayCommand]
-        async Task GetTheLocationAsync()
-        {
-            Stopwatch watch = Stopwatch.StartNew();
-
-            if (IsBusy)
-                return;
-            try
-            {
-                var location = await geolocation.GetLocationAsync();
-                if (location == null)
-                {
-                    watch.Restart();
-                    watch.Start();
-                    location = await geolocation.GetLocationAsync(
-                        new GeolocationRequest
-                        {
-                            DesiredAccuracy = GeolocationAccuracy.Best,
-                            Timeout = TimeSpan.FromSeconds(30),
-                        }
-                    );
-                }
-                if (location == null)
-                    return;
-                await Shell.Current.DisplayAlert("Test done",
-                    $"Searching time is {watch.ElapsedMilliseconds}", "OK");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                await Shell.Current.DisplayAlert("Error!", $"Unable to get closest monkeys: {ex.Message}", "OK");
-            }
-            finally { }
-        }
+        }       
     }
 
     public struct Vector3
