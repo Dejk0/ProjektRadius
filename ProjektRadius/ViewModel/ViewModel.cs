@@ -57,7 +57,15 @@ namespace ProjektRadius.ViewModel
           double beta = Beta_Calculating(x, y, z, w);
           double gamma = Gamma_Calculating(x, y, z, w);      
           UpdateTheAngles(alpha,beta,gamma);
-        }
+      if (sw.ElapsedMilliseconds > 50)
+      {
+        sw.Restart();
+        alfaAngle_1.Add(Math.Round(AlfaAngle,3));
+        betaAngle_1.Add(Math.Round(BetaAngle, 3));
+        gammaAngle_1.Add(Math.Round(GammaAngle, 3));
+        angleTimeListInMS.Add(timeWatch.ElapsedMilliseconds);
+      }
+    }
     private void UpdateTheAngles(double alpha, double beta, double gamma)
     {
       AlfaAngle = alpha * 180.0 / Math.PI;
@@ -105,7 +113,7 @@ namespace ProjektRadius.ViewModel
         {
           if (orientationSensor.IsMonitoring)
           {
-            
+            sw.Stop();
             orientationSensor.Stop();
             geolocator.StopListeningAsync();
             break;
@@ -114,23 +122,13 @@ namespace ProjektRadius.ViewModel
           {
             sw.Restart();
             orientationSensor.Start(sensorSpeed: SensorSpeed.Fastest);
-            geolocator.StartListeningAsync(TimeSpan.FromMilliseconds(50),0.01);
+            geolocator.StartListeningAsync(TimeSpan.FromMilliseconds(100),0.01);
             break;
           }
         }
       }
     }
-    private void Accelerometer_Working(object sender, AccelerometerChangedEventArgs args)
-    { 
-      if (sw.ElapsedMilliseconds > 50)
-      {
-       sw.Restart();
-       alfaAngle_1.Add(AlfaAngle);
-       betaAngle_1.Add(BetaAngle);
-       gammaAngle_1.Add(GammaAngle);
-       angleTimeListInMS.Add(timeWatch.ElapsedMilliseconds);
-      }
-    }
+    
     [RelayCommand]
     public async Task ExportToCsvAsync()
     {
@@ -152,7 +150,7 @@ namespace ProjektRadius.ViewModel
       using (StreamWriter sw = new StreamWriter(downloadsPath))
       {
         sw.WriteLine("Time;Velocity");
-        for (int row = 0; row < angleTimeListInMS.Count; row++)
+        for (int row = 0; row < velocityTimeListInMS.Count; row++)
         {
           var line = string.Join(";",
               velocityTimeListInMS[row].ToString(),
@@ -168,7 +166,7 @@ namespace ProjektRadius.ViewModel
       var downloadsPath = Path.Combine("/storage/emulated/0/Download/", filePath);
       using (StreamWriter sw = new StreamWriter(downloadsPath))
       {
-        sw.WriteLine("Time;XAccel;YAccel;ZAccel;AlfaAngle;BetaAngle;GammaAngle");
+        sw.WriteLine("Time;AlfaAngle;BetaAngle;GammaAngle");
         for (int row = 0; row < angleTimeListInMS.Count; row++)
         {
           var line = string.Join(";",
