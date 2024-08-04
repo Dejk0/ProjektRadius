@@ -22,23 +22,21 @@
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
             <Button                
-    Text="Start Accelomater" 
-    Command="{Binding GetAccelerometerCommand}"
-    IsEnabled="{Binding IsNotBusy}"
-    HorizontalOptions="Fill" />
-            <Label Text="Gyorsulások"/>
-            <Label Text="{Binding XResult}"/>
-            <Label Text="{Binding YResult}"/>
-            <Label Text="{Binding ZResult}"/>
+            Text="Start Accelomater" 
+            Command="{Binding GetAccelerometerCommand}"
+            IsEnabled="{Binding IsNotBusy}"
+            HorizontalOptions="Fill" />           
             <Label Text="Szögek"/>
             <Label Text="{Binding AlfaAngle}"/>
             <Label Text="{Binding BetaAngle}"/>
             <Label Text="{Binding GammaAngle}"/>
+            <Label Text="Sebesség"/>
+            <Label Text="{Binding Speed}"/>
             <Button                
-Text="File write" 
-Command="{Binding ExportToCsvCommand}"
-IsEnabled="{Binding IsNotBusy}"
-HorizontalOptions="Fill" />
+            Text="File write" 
+            Command="{Binding ExportToCsvCommand}"
+            IsEnabled="{Binding IsNotBusy}"
+            HorizontalOptions="Fill" /> 
         </VerticalStackLayout>
     </ScrollView>
 
