@@ -18,20 +18,20 @@
                 SemanticProperties.Description="dot net bot in a race car number eight" />
 
             <Label
-                Text="Hello, Wife!"
+                Text="Project Radius"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
             <Button                
-            Text="Start Accelomater" 
-            Command="{Binding GetAccelerometerCommand}"
+            Text="Start Recording" 
+            Command="{Binding StartRecordingCommand}"
             IsEnabled="{Binding IsNotBusy}"
-            HorizontalOptions="Fill" />           
-            <Label Text="Szögek"/>
-            <Label Text="{Binding AlfaAngle}"/>
-            <Label Text="{Binding BetaAngle}"/>
-            <Label Text="{Binding GammaAngle}"/>
-            <Label Text="Sebesség"/>
-            <Label Text="{Binding Speed}"/>
+            HorizontalOptions="Fill" />
+            <Label Text="Szögek" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="{Binding AlfaAngle}"  HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="{Binding BetaAngle}" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="{Binding GammaAngle}" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="Sebesség"  HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="{Binding Speed}"  FontSize="100" HorizontalOptions="Center" VerticalOptions="Center"/>
             <Button                
             Text="File write" 
             Command="{Binding ExportToCsvCommand}"
