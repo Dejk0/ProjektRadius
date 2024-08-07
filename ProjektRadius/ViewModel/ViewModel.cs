@@ -11,6 +11,7 @@ namespace ProjektRadius.ViewModel
 {
     public partial class ViewModel : BaseViewModel
     {
+    IGeolocation geolocation;
     IOrientationSensor orientationSensor;
     IGeolocator geolocator;
     private Stopwatch sw = new Stopwatch();
@@ -21,49 +22,49 @@ namespace ProjektRadius.ViewModel
     public List<double> gammaAngle_1 = new List<double>();
     public List<double> velocity_list = new List<double>();
     public List<long> angleTimeListInMS = new List<long>();
-    public List<long> velocityTimeListInMS = new List<long>();
+    public List<long> locationTimeListInMS = new List<long>();
+    public List<double> latitude_list = new List<double>();
+    public List<double> longitude_list = new List<double>();
 
     [ObservableProperty]
-        public double alfaAngle;
-        [ObservableProperty]
-        public double betaAngle;
-        [ObservableProperty]
-        public double gammaAngle;
-        [ObservableProperty]
-        public double speed;
+    public double alfaAngle;
+    [ObservableProperty]
+    public double betaAngle;
+    [ObservableProperty]
+    public double gammaAngle;
+    [ObservableProperty]
+    public double accuracy;
 
-        public double alfaAngle_base;
-        public double betaAngle_base;
-        public double gammaAngle_base;
-        public ViewModel(IConnectivity connectivity,  IOrientationSensor orientationSensor,  IGeolocator geolocator)
-        {
-            Title = "ProjektRadius";  
-            this.orientationSensor = orientationSensor;
-            orientationSensor.ReadingChanged += OrientationSensor_ReadingChanged;
-            this.geolocator = geolocator;
-            geolocator.PositionChanged += Geolocator_PositionChanged;
-        }
+    public bool needlocation = false;
+    public double alfaAngle_base;
+    public double betaAngle_base;
+    public double gammaAngle_base;
+    public ViewModel(IConnectivity connectivity,  IOrientationSensor orientationSensor,  IGeolocator geolocator, IGeolocation geolocation){
+    Title = "ProjektRadius";  
+    this.orientationSensor = orientationSensor;
+    orientationSensor.ReadingChanged += OrientationSensor_ReadingChanged;
+    this.geolocator = geolocator;
+    this.geolocation = geolocation;
+    geolocator.PositionChanged += Geolocator_PositionChanged;
+    }
+    private void Geolocator_PositionChanged(object? sender, PositionEventArgs e){
+      latitude_list.Add(e.Position.Latitude);
+      longitude_list.Add(e.Position.Longitude);
+      locationTimeListInMS.Add(timeWatch.ElapsedMilliseconds);
+      Accuracy = Math.Round(e.Position.Accuracy, 2);
+    }
 
-        private void Geolocator_PositionChanged(object? sender, PositionEventArgs e)
-        {
-            Speed = e.Position.Speed;
-      velocity_list.Add(e.Position.Speed);
-      velocityTimeListInMS.Add(timeWatch.ElapsedMilliseconds);
-        }
-
-        public void ToEulerAngles(float x, float y, float z, float w)
-        {
-          double alpha = Alfa_Calculating(x, y, z, w);
-          double beta = Beta_Calculating(x, y, z, w);
-          double gamma = Gamma_Calculating(x, y, z, w);      
-          UpdateTheAngles(alpha,beta,gamma);
-      if (sw.ElapsedMilliseconds > 50)
-      {
-        sw.Restart();
-        alfaAngle_1.Add(Math.Round(AlfaAngle,3));
-        betaAngle_1.Add(Math.Round(BetaAngle, 3));
-        gammaAngle_1.Add(Math.Round(GammaAngle, 3));
-        angleTimeListInMS.Add(timeWatch.ElapsedMilliseconds);
+    public void ToEulerAngles(float x, float y, float z, float w){
+    double alpha = Alfa_Calculating(x, y, z, w);
+    double beta = Beta_Calculating(x, y, z, w);
+    double gamma = Gamma_Calculating(x, y, z, w);      
+    UpdateTheAngles(alpha,beta,gamma);
+    if (sw.ElapsedMilliseconds > 50){
+      sw.Restart();
+      alfaAngle_1.Add(Math.Round(AlfaAngle,3));
+      betaAngle_1.Add(Math.Round(BetaAngle, 3));
+      gammaAngle_1.Add(Math.Round(GammaAngle, 3));
+      angleTimeListInMS.Add(timeWatch.ElapsedMilliseconds);
       }
     }
     private void UpdateTheAngles(double alpha, double beta, double gamma)
@@ -101,7 +102,9 @@ namespace ProjektRadius.ViewModel
     private void OrientationSensor_ReadingChanged(object? sender, OrientationSensorChangedEventArgs e)
         {
             ToEulerAngles(e.Reading.Orientation.X, e.Reading.Orientation.Y, e.Reading.Orientation.Z, e.Reading.Orientation.W);
-        }
+      
+    }
+    
     [RelayCommand]
     async Task StartRecordingAsync()
     {
@@ -116,13 +119,14 @@ namespace ProjektRadius.ViewModel
             sw.Stop();
             orientationSensor.Stop();
             geolocator.StopListeningAsync();
+            needlocation = false;
             break;
           }
           else
           {
             sw.Restart();
             orientationSensor.Start(sensorSpeed: SensorSpeed.Fastest);
-            geolocator.StartListeningAsync(TimeSpan.FromMilliseconds(100),0.01);
+            geolocator.StartListeningAsync(TimeSpan.FromMilliseconds(100), 0.001);
             break;
           }
         }
@@ -135,7 +139,7 @@ namespace ProjektRadius.ViewModel
       try
       {
         CreatingAnglesCSV();
-        CreatingVelocitysCSV();
+        CreatingLocationsCSV();
         await Application.Current.MainPage.DisplayAlert("Success", $"File saved to downloadsPath", "OK");
        }
        catch (Exception ex)
@@ -143,18 +147,19 @@ namespace ProjektRadius.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
        }
      }
-    private void CreatingVelocitysCSV()
+    private void CreatingLocationsCSV()
     {       
-      string filePath = "velocitys.csv";
+      string filePath = "locations.csv";
       var downloadsPath = Path.Combine("/storage/emulated/0/Download/", filePath);
       using (StreamWriter sw = new StreamWriter(downloadsPath))
       {
-        sw.WriteLine("Time;Velocity");
-        for (int row = 0; row < velocityTimeListInMS.Count; row++)
+        sw.WriteLine("Time;long;latti");
+        for (int row = 0; row < locationTimeListInMS.Count; row++)
         {
           var line = string.Join(";",
-              velocityTimeListInMS[row].ToString(),
-              velocity_list[row].ToString()
+              locationTimeListInMS[row].ToString(),
+              longitude_list[row].ToString(),
+              latitude_list[row].ToString()
           );
           sw.WriteLine(line);
         }
@@ -178,11 +183,11 @@ namespace ProjektRadius.ViewModel
           sw.WriteLine(line);
         }
       }
-    }
+    }   
 
-    }
-   
-    public struct Vector3
+  }
+
+  public struct Vector3
     {
         public float X;
         public float Y;

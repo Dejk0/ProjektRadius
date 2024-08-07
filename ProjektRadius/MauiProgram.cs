@@ -24,9 +24,7 @@ namespace ProjektRadius
             builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
             builder.Services.AddSingleton<IGeolocation>(Geolocation.Default);
             builder.Services.AddSingleton<IMap>(Map.Default);
-            builder.Services.AddSingleton<IAccelerometer>(Accelerometer.Default);
             builder.Services.AddSingleton<IOrientationSensor>(OrientationSensor.Default);
-            builder.Services.AddSingleton<IMagnetometer>(Magnetometer.Default);
             builder.Services.AddSingleton<IGeolocator>(CrossGeolocator.Current);
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<ViewModel.ViewModel>();

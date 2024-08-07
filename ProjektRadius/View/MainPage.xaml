@@ -31,7 +31,7 @@
             <Label Text="{Binding BetaAngle}" HorizontalOptions="Center" VerticalOptions="Center"/>
             <Label Text="{Binding GammaAngle}" HorizontalOptions="Center" VerticalOptions="Center"/>
             <Label Text="Sebesség"  HorizontalOptions="Center" VerticalOptions="Center"/>
-            <Label Text="{Binding Speed}"  FontSize="100" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="{Binding Accuracy}"  FontSize="100" HorizontalOptions="Center" VerticalOptions="Center"/>
             <Button                
             Text="File write" 
             Command="{Binding ExportToCsvCommand}"
