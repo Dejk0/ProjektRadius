@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjektRadius", "ProjektRadius\ProjektRadius.csproj", "{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "..\..\..\G.E\Game\Game\Game\Game.csproj", "{0439DC13-13D6-4483-BE3A-C84046575FA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoriGE", "..\..\..\G.E\DoriGE\DoriGE\Game\DoriGE.csproj", "{1A1F0E9A-79BD-47D8-B907-80B084C85B96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,10 @@ Global
 		{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{0439DC13-13D6-4483-BE3A-C84046575FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0439DC13-13D6-4483-BE3A-C84046575FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0439DC13-13D6-4483-BE3A-C84046575FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0439DC13-13D6-4483-BE3A-C84046575FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1F0E9A-79BD-47D8-B907-80B084C85B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1F0E9A-79BD-47D8-B907-80B084C85B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1F0E9A-79BD-47D8-B907-80B084C85B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1F0E9A-79BD-47D8-B907-80B084C85B96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
