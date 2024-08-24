@@ -10,8 +10,7 @@ using GeolocatorPlugin.Abstractions;
 namespace ProjektRadius.ViewModel
 {
     public partial class ViewModel : BaseViewModel
-    {
-    IGeolocation geolocation;
+    {    
     IOrientationSensor orientationSensor;
     IGeolocator geolocator;
     private Stopwatch sw = new Stopwatch();
@@ -39,12 +38,11 @@ namespace ProjektRadius.ViewModel
     public double alfaAngle_base;
     public double betaAngle_base;
     public double gammaAngle_base;
-    public ViewModel(IConnectivity connectivity,  IOrientationSensor orientationSensor,  IGeolocator geolocator, IGeolocation geolocation){
+    public ViewModel(IConnectivity connectivity,  IOrientationSensor orientationSensor,  IGeolocator geolocator){
     Title = "ProjektRadius";  
     this.orientationSensor = orientationSensor;
     orientationSensor.ReadingChanged += OrientationSensor_ReadingChanged;
     this.geolocator = geolocator;
-    this.geolocation = geolocation;
     geolocator.PositionChanged += Geolocator_PositionChanged;
     }
     private void Geolocator_PositionChanged(object? sender, PositionEventArgs e){
@@ -59,7 +57,7 @@ namespace ProjektRadius.ViewModel
     double beta = Beta_Calculating(x, y, z, w);
     double gamma = Gamma_Calculating(x, y, z, w);      
     UpdateTheAngles(alpha,beta,gamma);
-    if (sw.ElapsedMilliseconds > 50){
+      if (sw.ElapsedMilliseconds > 50){
       sw.Restart();
       alfaAngle_1.Add(Math.Round(AlfaAngle,3));
       betaAngle_1.Add(Math.Round(BetaAngle, 3));
@@ -125,8 +123,8 @@ namespace ProjektRadius.ViewModel
           else
           {
             sw.Restart();
-            orientationSensor.Start(sensorSpeed: SensorSpeed.Fastest);
-            geolocator.StartListeningAsync(TimeSpan.FromMilliseconds(100), 0.001);
+            orientationSensor.Start(sensorSpeed: SensorSpeed.Fastest); 
+            await geolocator.StartListeningAsync(TimeSpan.FromMilliseconds(50), 1.0, true);
             break;
           }
         }
@@ -140,7 +138,7 @@ namespace ProjektRadius.ViewModel
       {
         CreatingAnglesCSV();
         CreatingLocationsCSV();
-        await Application.Current.MainPage.DisplayAlert("Success", $"File saved to downloadsPath", "OK");
+        await Application.Current.MainPage.DisplayAlert("Success", $"Files saved to /storage/emulated/0/Download/", "OK");
        }
        catch (Exception ex)
        {
@@ -148,12 +146,13 @@ namespace ProjektRadius.ViewModel
        }
      }
     private void CreatingLocationsCSV()
-    {       
+    {
       string filePath = "locations.csv";
-      var downloadsPath = Path.Combine("/storage/emulated/0/Download/", filePath);
-      using (StreamWriter sw = new StreamWriter(downloadsPath))
+      var fullPath = Path.Combine("/storage/emulated/0/Download/", filePath);
+      using (StreamWriter sw = new StreamWriter(fullPath))
       {
         sw.WriteLine("Time;long;latti");
+
         for (int row = 0; row < locationTimeListInMS.Count; row++)
         {
           var line = string.Join(";",
@@ -162,9 +161,9 @@ namespace ProjektRadius.ViewModel
               latitude_list[row].ToString()
           );
           sw.WriteLine(line);
-        }
+        } 
       }
-    }
+      }
     private void CreatingAnglesCSV()
     {
       string filePath = "angles.csv";
@@ -182,6 +181,7 @@ namespace ProjektRadius.ViewModel
           );
           sw.WriteLine(line);
         }
+        
       }
     }   
 
