@@ -63,6 +63,14 @@ namespace ProjektRadius.ViewModel
       betaAngle_1.Add(Math.Round(BetaAngle, 3));
       gammaAngle_1.Add(Math.Round(GammaAngle, 3));
       angleTimeListInMS.Add(timeWatch.ElapsedMilliseconds);
+        if (timeWatch.Elapsed.Minutes>20)
+        {
+          sw.Stop();
+          orientationSensor.Stop();
+          geolocator.StopListeningAsync();
+          needlocation = false;
+          Application.Current.MainPage.DisplayAlert("The data collecting is closed", $"The elapsed time is more than 20 minutes", "OK");
+        }
       }
     }
     private void UpdateTheAngles(double alpha, double beta, double gamma)
