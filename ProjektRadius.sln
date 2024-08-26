@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjektRadius", "ProjektRadius\ProjektRadius.csproj", "{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoriGE", "DoriGE\DoriGE\DoriGE.csproj", "{3069DC66-C1D0-45A2-B2E2-683DD32DFA2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoriGE", "DoriGE\DoriGE.csproj", "{DEDC8ECB-FF0E-4819-8910-77E85A24F177}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,10 @@ Global
 		{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{3069DC66-C1D0-45A2-B2E2-683DD32DFA2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3069DC66-C1D0-45A2-B2E2-683DD32DFA2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3069DC66-C1D0-45A2-B2E2-683DD32DFA2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3069DC66-C1D0-45A2-B2E2-683DD32DFA2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEDC8ECB-FF0E-4819-8910-77E85A24F177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEDC8ECB-FF0E-4819-8910-77E85A24F177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEDC8ECB-FF0E-4819-8910-77E85A24F177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEDC8ECB-FF0E-4819-8910-77E85A24F177}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
