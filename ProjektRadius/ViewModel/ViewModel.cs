@@ -169,9 +169,9 @@ namespace ProjektRadius.ViewModel
               latitude_list[row].ToString()
           );
           sw.WriteLine(line);
-        } 
+        }
       }
-      }
+    }
     private void CreatingAnglesCSV()
     {
       string filePath = "angles.csv";
