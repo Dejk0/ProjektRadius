@@ -141,9 +141,9 @@ namespace ProjektRadius.ViewModel
     
     [RelayCommand]
     public async Task ExportToCsvAsync()
-    {
+    {      
       try
-      {
+      {        
         CreatingAnglesCSV();
         CreatingLocationsCSV();
         await Application.Current.MainPage.DisplayAlert("Success", $"Files saved to /storage/emulated/0/Download/", "OK");
@@ -189,7 +189,6 @@ namespace ProjektRadius.ViewModel
           );
           sw.WriteLine(line);
         }
-        
       }
     }   
 
