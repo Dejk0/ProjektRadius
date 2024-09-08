@@ -159,7 +159,12 @@ namespace GraphicEngine
       _lightingShader.SetFloat("spotLight.outerCutOff", MathF.Cos(MathHelper.DegreesToRadians(17.5f)));
 
       Matrix4 plateModell = Matrix4.CreateTranslation(yoda.Location);
+      yoda.Rotation.X = 20.0f;
+      yoda.Rotation.Y = 10.0f;
       plateModell = plateModell * Matrix4.CreateRotationX(yoda.Rotation.X);
+      plateModell = plateModell * Matrix4.CreateRotationY(yoda.Rotation.Y);
+      plateModell = plateModell * Matrix4.CreateRotationZ(yoda.Rotation.Z);
+
       _lightingShader.SetMatrix4("model", plateModell);
       GL.DrawArrays(PrimitiveType.Triangles, 0, yoda._vertices.Length);
 
