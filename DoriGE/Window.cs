@@ -20,6 +20,7 @@ namespace GraphicEngine
     public DoriGE.Objects.CubePositions cubePositions = new DoriGE.Objects.CubePositions();
     public DoriGE.Objects.Yoda.Yoda yoda = new Yoda();
     public DoriGE.Objects.Cubes.Cube body = new Cube();
+    public DoriGE.Objects.Plate.Plate plate = new DoriGE.Objects.Plate.Plate();
 
 
     // We need the point lights' positions to draw the lamps and to get light the materials properly
@@ -32,9 +33,10 @@ namespace GraphicEngine
         };
 
 
-    private int _vertexBufferObject;
-    private int _vertexBufferObject2;
+    private int yoda_vertexBufferObject;
+    private int plate_vertexBufferObject;
     private int _vaoModel_yoda;
+    private int _vaoModel_plate;
     private int _vaoModel_cube;
     private int _vaoLamp;
 
@@ -56,18 +58,19 @@ namespace GraphicEngine
       base.OnLoad();
       GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       GL.Enable(EnableCap.DepthTest);
-      _vertexBufferObject = GL.GenBuffer();
-      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-
+      yoda_vertexBufferObject = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, yoda_vertexBufferObject);
       GL.BufferData(BufferTarget.ArrayBuffer, yoda._vertices.Length * sizeof(float), yoda._vertices, BufferUsageHint.StaticDraw);
-
+      //plate_vertexBufferObject = GL.GenBuffer();     
+      //GL.BufferData(BufferTarget.ArrayBuffer, plate._vertices.Length * sizeof(float), plate._vertices, BufferUsageHint.StaticDraw);
       _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
       _lampShader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
       //LoadingVaoModel(ref _vaoModel_yoda);
       yoda.LoadingVaoModel(ref _vaoModel_yoda);
+      //plate.LoadingVaoModel(ref _vaoModel_plate);
 
-      LoadingVboModel(_vertexBufferObject);
+      LoadingVboModel(yoda_vertexBufferObject);
       LoadingVaoLampModel(ref _vaoLamp);
 
       _diffuseMap = Texture.LoadFromFile("Resources/container2.png");
@@ -109,7 +112,7 @@ namespace GraphicEngine
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       base.OnRenderFrame(e);
-
+      float deltatime = (float)e.Time;
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       GL.BindVertexArray(_vaoModel_yoda);
@@ -158,14 +161,17 @@ namespace GraphicEngine
       _lightingShader.SetFloat("spotLight.cutOff", MathF.Cos(MathHelper.DegreesToRadians(12.5f)));
       _lightingShader.SetFloat("spotLight.outerCutOff", MathF.Cos(MathHelper.DegreesToRadians(17.5f)));
 
-      Matrix4 plateModell = Matrix4.CreateTranslation(yoda.Location);
+      Matrix4 yodaModell = Matrix4.CreateTranslation(yoda.Location);
       yoda.Rotation.X = 20.0f;
       yoda.Rotation.Y = 10.0f;
-      plateModell = plateModell * Matrix4.CreateRotationX(yoda.Rotation.X);
-      plateModell = plateModell * Matrix4.CreateRotationY(yoda.Rotation.Y);
-      plateModell = plateModell * Matrix4.CreateRotationZ(yoda.Rotation.Z);
+      yoda.LinearAccelaretion.X = 0.1f;
+      yoda.LinearVelocity.X = yoda.LinearVelocity.X + yoda.LinearAccelaretion.X * deltatime;
+      yoda.Location.X = yoda.Location.X + yoda.LinearVelocity.X * deltatime;
+      yodaModell = yodaModell * Matrix4.CreateRotationX(yoda.Rotation.X);
+      yodaModell = yodaModell * Matrix4.CreateRotationY(yoda.Rotation.Y);
+      yodaModell = yodaModell * Matrix4.CreateRotationZ(yoda.Rotation.Z);
 
-      _lightingShader.SetMatrix4("model", plateModell);
+      _lightingShader.SetMatrix4("model", yodaModell);
       GL.DrawArrays(PrimitiveType.Triangles, 0, yoda._vertices.Length);
 
 

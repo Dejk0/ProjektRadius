@@ -16,6 +16,9 @@
     <None Update="Objects\Cubes\cube.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Objects\Plates\Plate.obj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Objects\Yoda\yoda.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -37,10 +40,6 @@
     <None Update="Shaders\shader.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Objects\Plates\" />
   </ItemGroup>
 
 </Project>
