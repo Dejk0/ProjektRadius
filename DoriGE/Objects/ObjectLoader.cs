@@ -5,10 +5,10 @@ using OpenTK.Windowing.Desktop;
 
 namespace DoriGE.Objects
 {
-  public class ObjectLoader 
+  public class ObjectLoader : CoordinateSystem.CartesianCS
   {  
     public string filePath="";
-
+    
     public uint[] _indices;
     public float[] _vertices;
     private List<uint> _indices_main = new List<uint>();

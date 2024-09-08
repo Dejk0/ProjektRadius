@@ -13,7 +13,7 @@ namespace DoriGE.Objects.Yoda
     { 
       filePath = "Objects\\Yoda\\yoda.obj";
       LoadModel();
-      CalculateNormals();
+      CalculateNormals();      
     }
 
     public void LoadingVaoModel(ref int _vaoModel)
