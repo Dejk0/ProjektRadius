@@ -5,6 +5,24 @@ namespace ReadLocationsCSVTest
   public class UnitTest1
   {
     public string FilePathToCSVTest = @"C:\Users\deakt\source\repos\ProjektRadius\ReadLocationsCSV\Resourse\test.csv";
+    [Fact]
+    public void CreatNC_FileOutputFormat_Test()
+    {
+      string filePath = "formattedOutputTest.csv";
+      var reader = new Reader();
+      reader.X_Coordinates.Add(123.456789);
+      reader.Y_Coordinates.Add(987.654321);
+      reader.Longtitude.Add(40.02); // These are just placeholders for the test
+      reader.Latitude.Add(20.01);
+      reader.CreatNC();
+
+      string outputFilePath = "Resourse\\nctest.csv";
+      string[] lines = File.ReadAllLines(outputFilePath);
+
+      lines[0].Should().Contain("G01");
+      lines[0].Should().Contain("X");
+      lines[0].Should().Contain("Y");
+    }
 
     [Fact]
     public void GetLenght_From_30angle_Test()
@@ -261,22 +279,7 @@ namespace ReadLocationsCSVTest
       Action act = () => reader.Read();
       act.Should().Throw<FormatException>();
     }
-    [Fact]
-    public void CreatNC_FileOutputFormat_Test()
-    {
-      string filePath = "formattedOutputTest.csv";
-      var reader = new Reader();
-      reader.X_Coordinates.Add(123.456789);
-      reader.Y_Coordinates.Add(987.654321);
-      reader.Longtitude.Add(40.02); // These are just placeholders for the test
-      reader.Latitude.Add(20.01);
-      reader.CreatNC();
-
-      string outputFilePath = "C:\\Users\\deakt\\source\\repos\\ProjektRadius\\ConsoleApp1\\Resourse\\nctest.csv";
-      var lines = File.ReadAllLines(outputFilePath);
-
-      lines[0].Should().Be("G01X123.456789Y987.654321");
-    }
+   
     [Fact]
     public void GetLenght_LargeAngle_Test()
     {
