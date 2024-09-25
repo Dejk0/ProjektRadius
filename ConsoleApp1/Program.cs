@@ -5,7 +5,8 @@ namespace ConsoleApp1
   {
     static void Main(string[] args)
     {
-      Reader reader = new Reader("Resourse\\test.csv");
+      Reader reader = new Reader("Resourse\\locations.csv");
+      reader.CreatNC();
 
       Console.WriteLine("Hello, World!");
     }

@@ -112,7 +112,7 @@ namespace ReadLocationsCSVTest
       var reader = new Reader();
       reader.FilePath = "Resourse\\test.csv";
       reader.Read();
-      reader.Latitude.Count.Should().Be(2);
+      reader.Latitude.Count.Should().Be(6);
     }
     [Fact]
     public void SetTheFirstLongtitudeTest()
@@ -123,7 +123,8 @@ namespace ReadLocationsCSVTest
       var reader = new Reader();
       reader.FilePath = filePath;
       reader.Read();
-      reader.SetTheFirstLongtitude();
+      reader.SetTheAVGLists();
+      reader.SetTheFirstLongtitudeAVG();
       reader.Longtitude[0].Should().Be(reader.FirstLongtitude);
     }
     [Fact]
@@ -135,7 +136,8 @@ namespace ReadLocationsCSVTest
       var reader = new Reader();
       reader.FilePath = filePath;
       reader.Read();
-      reader.SetTheFirstlatitude();
+      reader.SetTheAVGLists();
+      reader.SetTheFirstlatitudeAVG();
       reader.Latitude[0].Should().Be(reader.FirstLatitude);
     }
     [Fact]
@@ -147,7 +149,7 @@ namespace ReadLocationsCSVTest
       var reader = new Reader();
       reader.FilePath = filePath;
       reader.SetTheCoordinateFromCSV();
-      reader.Latitude.Count.Should().Be(reader.X_Coordinates.Count);
+      (reader.Latitude.Count/3).Should().Be(reader.X_Coordinates.Count);
     }
     [Fact]
     public void SetTheCoordinateFromCSVFirstCoordinateTest()
@@ -164,7 +166,7 @@ namespace ReadLocationsCSVTest
     public void SetTheCoordinateFromCSVSecondCoordinateTest()
     {
       string filePath = "testdata.csv";
-      string[] testData = { "HeaderLine", "1;20,01;40,02", "20;20,02;40,03", "3202;20,02;40,05" };
+      string[] testData = { "HeaderLine", "1;20,01;40,02", "20;20,02;40,03", "3202;20,02;40,05", "1;20,2;40,02", "20;20,4;40,03", "3202;20,8;40,05" };
       File.WriteAllLines(filePath, testData);
       var reader = new Reader();
       reader.FilePath = filePath;
@@ -175,7 +177,7 @@ namespace ReadLocationsCSVTest
     public void SetTheTimeFromCSVWithBigTimeValueTest()
     {
       string filePath = "testdata.csv";
-      string[] testData = { "HeaderLine", "30020230202303;20,02;40,05" };
+      string[] testData = { "HeaderLine", "30020230202303;20,02;40,05", "30020230202303;20,02;40,05", "30020230202303;20,02;40,05" };
       File.WriteAllLines(filePath, testData);
       var reader = new Reader();
       reader.FilePath = filePath;
@@ -283,6 +285,123 @@ namespace ReadLocationsCSVTest
 
       var result = reader.GetLenght(270);
       result.Should().BeApproximately(-6371000, 0.0000001);
+    }
+    [Fact]
+    public void GetDoubleListAvg_2_3_4_avg_Test()
+    {
+      var reader = new Reader();
+      List<double> testlist = new List<double>();
+      testlist.Add(2);
+      testlist.Add(3);
+      testlist.Add(4);
+      List<double> result = reader.GetDoubleListAvg(testlist);
+      result[0].Should().BeApproximately(3, 0.01);
+    }
+    [Fact]
+    public void GetDoubleListAvg_2_3_4_4_avg_Test()
+    {
+      var reader = new Reader();
+      List<double> testlist = new List<double>();
+      testlist.Add(2);
+      testlist.Add(3);
+      testlist.Add(4);
+      testlist.Add(4);
+      testlist.Add(4);
+      testlist.Add(4);
+      List<double> result = reader.GetDoubleListAvg(testlist);
+      result[1].Should().BeApproximately(4, 0.01);
+    }
+    [Fact]
+    public void GetTimeListAvg_2_3_4_avg_Test()
+    {
+      var reader = new Reader();
+      List<double> testlist = new List<double>();
+      testlist.Add(2);
+      testlist.Add(3);
+      testlist.Add(4);
+      List<double> result = reader.GetDoubleListAvg(testlist);
+      result[0].Should().BeApproximately(3, 0.01);
+    }
+    [Fact]
+    public void GetTimeListAvg_2_3_4_4_avg_Test()
+    {
+      var reader = new Reader();
+      List<long> testlist = new List<long>();
+      testlist.Add(2);
+      testlist.Add(3);
+      testlist.Add(4);
+      testlist.Add(4);
+      testlist.Add(4);
+      testlist.Add(4);
+      List<double> result = reader.GetTimeListAvg(testlist);
+      result[1].Should().BeApproximately(4, 0.01);
+    }
+    [Fact]
+    public void GetTimeListAvg_with_bignumbers_avg_Test()
+    {
+      var reader = new Reader();
+      List<long> testlist = new List<long>();
+      testlist.Add(323131231);
+      testlist.Add(323131232);
+      testlist.Add(323131233);
+     
+      List<double> result = reader.GetTimeListAvg(testlist);
+      result[0].Should().BeApproximately(323131232, 0.01);
+    }
+    public void TestListLoading(Reader reader)
+    {
+      reader.Longtitude.Add(1);
+      reader.Longtitude.Add(2);
+      reader.Longtitude.Add(3);
+
+      reader.Latitude.Add(4);
+      reader.Latitude.Add(5);
+      reader.Latitude.Add(6);
+
+      reader.Time.Add(11);
+      reader.Time.Add(12);
+      reader.Time.Add(13);
+    }
+    [Fact]
+    public void TestingTheTestList()
+    {
+      var reader = new Reader();
+      TestListLoading(reader);
+      reader.Longtitude[0].Should().Be(1);
+      reader.Longtitude[1].Should().Be(2);
+      reader.Longtitude[2].Should().Be(3);
+
+      reader.Latitude[0].Should().Be(4);
+      reader.Latitude[1].Should().Be(5);
+      reader.Latitude[2].Should().Be(6);
+
+      reader.Time[0].Should().Be(11);
+      reader.Time[1].Should().Be(12);
+      reader.Time[2].Should().Be(13);
+    }
+    [Fact]
+    public void SetTheAVGListsTest() 
+    {
+      var reader = new Reader();
+      TestListLoading(reader);
+      reader.SetTheAVGLists();
+
+      reader.LongtitudeAVG[0].Should().Be(2);
+      reader.LatitudeAVG[0].Should().Be(5);
+      reader.TimeAVG[0].Should().Be(12);
+    
+    }
+    [Fact]
+    public void SetTheAVGListsTest2()
+    {
+      var reader = new Reader();
+      TestListLoading(reader);
+      reader.SetTheAVGLists();
+
+      reader.LongtitudeAVG[0].Should().Be(2);
+      reader.LatitudeAVG[0].Should().Be(5);
+      reader.TimeAVG[0].Should().Be(12);
+
     }
   }
 }

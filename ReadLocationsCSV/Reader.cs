@@ -11,6 +11,9 @@ namespace ReadLocationsCSV
     public List<double> Longtitude = new List<double>();
     public List<double> Latitude = new List<double>();
     public List<long> Time = new List<long>();
+    public List<double> LongtitudeAVG = new List<double>();
+    public List<double> LatitudeAVG = new List<double>();
+    public List<double> TimeAVG = new List<double>();
     public List<double> X_Coordinates = new List<double>();
     public List<double> Y_Coordinates = new List<double>();
     public double FirstLongtitude;
@@ -27,17 +30,17 @@ namespace ReadLocationsCSV
     {
       FilePath = filepath;
       SetTheCoordinateFromCSV();
-      CreatNC();
     }
     public void SetTheCoordinateFromCSV()
     {
       Read();
-      SetTheFirstlatitude();
-      SetTheFirstLongtitude();
-      for (int i = 0; i < Longtitude.Count; i++)
+      SetTheAVGLists();
+      SetTheFirstlatitudeAVG();
+      SetTheFirstLongtitudeAVG();
+      for (int i = 0; i < LongtitudeAVG.Count; i++)
       {
-        double longti = FirstLongtitude - Longtitude[i];
-        double lat = FirstLatitude - Latitude[i];
+        double longti = FirstLongtitude - LongtitudeAVG[i];
+        double lat = FirstLatitude - LatitudeAVG[i];
         X_Coordinates.Add(GetLenght(longti));
         Y_Coordinates.Add(GetLenght(lat));
       }
@@ -46,7 +49,7 @@ namespace ReadLocationsCSV
     {
       using (StreamWriter writer = new StreamWriter("C:\\Users\\deakt\\source\\repos\\ProjektRadius\\ConsoleApp1\\Resourse\\nctest.csv"))
       {
-        for (int i = 0; i < Longtitude.Count; i++)
+        for (int i = 0; i < LongtitudeAVG.Count; i++)
         {
           string line = "G01X" + X_Coordinates[i].ToString().Replace(",", ".") + "Y" + Y_Coordinates[i].ToString().Replace(",", ".");
           writer.WriteLine(line);
@@ -76,17 +79,46 @@ namespace ReadLocationsCSV
           Time.Add(SetTimeFromLine(split[0]));
           Longtitude.Add(SetLongtitudeFromLine(split[1]));
           Latitude.Add(SetLattitudeFromLine(split[2]));
-        }
-      
+        }      
     }
     }
-    public void SetTheFirstLongtitude()
+    public void SetTheAVGLists()
     {
-      FirstLongtitude = Longtitude[0];
+      LongtitudeAVG = GetDoubleListAvg(Longtitude);
+      LatitudeAVG = GetDoubleListAvg(Latitude);
+      TimeAVG = GetTimeListAvg(Time); 
     }
-    public void SetTheFirstlatitude()
+    public List<double> GetDoubleListAvg(List<double> list)
     {
-      FirstLatitude = Latitude[0];
+      List<double> avg = new List<double>();  
+      for (int i = 0; i <= list.Count-3; i=i+3)
+      {
+        double[] longavg = { list[i], list[i+1], list[i+2] };
+        avg.Add(longavg.Average());
+      }
+     return avg;
+    }
+    public List<double> GetTimeListAvg(List<long> list)
+    {
+      List<double> avg = new List<double>();
+      for (int i = 0; i <= list.Count - 3; i = i + 3)
+      {
+        double[] longavg = { list[i], list[i + 1], list[i + 2] };
+        avg.Add(longavg.Average());
+      }
+      return avg;
+    }
+    public void SetTheFirstLongtitudeAVG()
+    {
+      FirstLongtitude = LongtitudeAVG[0];
+    }
+    public void SetTheFirstlatitudeAVG()
+    {
+      FirstLatitude = LatitudeAVG[0];
+    }
+    public void SetTheFirstTimeAVG()
+    {
+      FirstLatitude = LatitudeAVG[0];
     }
     public double GetLenght(double angle)
     {
