@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjektRadius", "ProjektRadius\ProjektRadius.csproj", "{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjektRadiusMAUI", "ProjektRadius\ProjektRadiusMAUI.csproj", "{6DB1FD91-E0C1-444C-B3AB-9E6493A46162}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoriGE", "DoriGE\DoriGE.csproj", "{DEDC8ECB-FF0E-4819-8910-77E85A24F177}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadLocationsCSVTest", "Rea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadLocationsCSV", "ReadLocationsCSV\ReadLocationsCSV.csproj", "{4225C3AA-2795-4BA9-9745-7202C875DD3B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{15883339-A665-427B-A566-96763B954C11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustRunTheCreatNCForTesting", "ConsoleApp1\JustRunTheCreatNCForTesting.csproj", "{15883339-A665-427B-A566-96763B954C11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
