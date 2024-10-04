@@ -47,7 +47,7 @@ namespace ReadLocationsCSV
     }
     public void CreatNC()
     {
-      using (StreamWriter writer = new StreamWriter("C:\\Users\\deakt\\source\\repos\\ProjektRadius\\ConsoleApp1\\Resourse\\nctest.csv"))
+      using (StreamWriter writer = new StreamWriter("C:\\Users\\deakt\\source\\repos\\ProjektRadius\\JustRunTheCreatNCForTesting\\Resourse\\nctest.csv"))
       {
         for (int i = 0; i < LongtitudeAVG.Count; i++)
         {

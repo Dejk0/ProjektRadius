@@ -41,7 +41,7 @@ namespace ReadLocationsCSVTest
     public void GetLenght_From_0angle_Test()
     {
       // Arrange
-      var reader = new Reader();
+      var reader = new Reader(); 
       reader.EarthRadiusInMater = 1;
 
       // Act
